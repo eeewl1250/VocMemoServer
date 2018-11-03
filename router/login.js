@@ -73,8 +73,7 @@ router.post('/', (req, res) => {
                             } else {
                                 res.cookie('token', token.token, {
                                     signed: false,
-                                    maxAge: Configs.cookie.maxAge,
-                                    httpOnly: true
+                                    maxAge: Configs.cookie.maxAge
                                 })
                                 res.json({
                                     code: 1,
