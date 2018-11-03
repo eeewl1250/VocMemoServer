@@ -34,4 +34,7 @@ app.use('/login', login)
 var register = require('./router/register.js')
 app.use('/register', register)
 
+var word = require('./router/word.js')
+app.use('/word', word)
+
 app.listen(3000, console.log('App listening at 3000.'))
