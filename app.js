@@ -37,4 +37,7 @@ app.use('/register', register)
 var word = require('./router/word.js')
 app.use('/word', word)
 
+var pic = require('./router/pic.js')
+app.use('/pic', pic)
+
 app.listen(3000, console.log('App listening at 3000.'))
