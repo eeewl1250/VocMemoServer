@@ -2,7 +2,10 @@ var mongoose = require('mongoose')
 
 var exampleSchema = new mongoose.Schema({
     sentence: String,
-    source: [mongoose.Schema.Types.ObjectId]
+    source: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'book'
+    }]
 })
 
 exampleSchema.index({ sentence: 1 })
