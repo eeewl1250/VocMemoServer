@@ -89,7 +89,7 @@ router.post('/exp', (req, res) => {
         } else {
             Example.create({
                 sentence: req.body.sentence,
-                source: [book.name]
+                source: [book._id]
             }, (err, exp) => {
                 if (err) {
                     console.log('Example Create Err: ' + err)
