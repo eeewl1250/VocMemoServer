@@ -128,12 +128,19 @@ router.post('/exp', (req, res) => {
 
 // 新增book
 router.post('/book', (req, res) => {
+    if (!req.body.code || !req.body.name) {
+        console.log('Front-end Error: Parameter Missing.')
+        res.json({
+            code: 0,
+            msg: 'Front-end Error: Parameter Missing.'
+        })
+    }
     Book.create({
         code: req.body.code,
         name: req.body.name
-    }, (err, exp) => {
+    }, (err, book) => {
         if (err) {
-            console.log('Example Create Err: ' + err)
+            console.log('Book Create Err: ' + err)
             res.json({
                 code: 0,
                 msg: 'Post-end Error.'
@@ -141,9 +148,9 @@ router.post('/book', (req, res) => {
         } else {
             res.json({
                 code: 1,
-                msg: 'Insert new example. Success.',
+                msg: 'Insert new Book. Success.',
                 data: {
-                    id: exp._id
+                    id: book._id
                 }
             })
         }
@@ -170,9 +177,9 @@ router.post('/book/code', (req, res) => {
             } else {
                 res.json({
                     code: 1,
-                    msg: '1.',
+                    msg: 'Get Book Code successfully.',
                     data: {
-                        code: req.body.lang + (Array(3).join(0) + (count + 1)).slice(-3)
+                        code: req.body.lang + (Array(3).join('0') + (count + 1)).slice(-3)
                     }
                 })
             }
