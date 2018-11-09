@@ -11,6 +11,11 @@ const Word = require('../models/word')
 const lineByLine = require('n-readlines')
 const liner = new lineByLine(path.resolve(__dirname, '../assets/dict/geWord.txt'))
 
+// 新建list
+router.post('/list', (req, res) => {
+
+})
+
 // 初始化单词库，导入单词及名词一二格与复数
 router.post('/init', (req, res) => {
     let line
@@ -59,6 +64,7 @@ router.post('/init', (req, res) => {
     })
 })
 
+// 新增word
 router.post('/word', (req, res) => {
     Word.create({
         word: req.body.name,
@@ -78,6 +84,7 @@ router.post('/word', (req, res) => {
     })
 })
 
+// 新增example
 router.post('/exp', (req, res) => {
     Book.findOne({code: req.body.code}, (err, book) => {
         if (err) {
@@ -112,6 +119,7 @@ router.post('/exp', (req, res) => {
     })
 })
 
+// 新增book
 router.post('/book', (req, res) => {
     Book.create({
         code: req.body.code,
