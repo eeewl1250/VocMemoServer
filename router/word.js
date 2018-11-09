@@ -4,6 +4,7 @@ const router = express.Router()
 const path = require('path')
 
 const Example = require('../models/example')
+const User = require('../models/user')
 const Book = require('../models/book')
 const Word = require('../models/word')
 
@@ -13,7 +14,13 @@ const liner = new lineByLine(path.resolve(__dirname, '../assets/dict/geWord.txt'
 
 // 新建list
 router.post('/list', (req, res) => {
+    User.findOne({name: 'bucky'}, (err, user) => {
+        if (err) {
+            console.log(err)
+        } else {
 
+        }
+    })
 })
 
 // 初始化单词库，导入单词及名词一二格与复数
@@ -141,6 +148,35 @@ router.post('/book', (req, res) => {
             })
         }
     })
+})
+
+// 生成book code
+router.post('/book/code', (req, res) => {
+    if (!req.body.lang) {
+        console.log('Front-end Error: Parameter Missing.')
+        res.json({
+            code: 0,
+            msg: 'Front-end Error: Parameter Missing.'
+        })
+    }
+    Book.$where('this.code.match(/' + req.body.lang + '/)')
+        .count((err, count) => {
+            if (err) {
+                console.log('Book Query Err: ' + err)
+                res.json({
+                    code: 0,
+                    msg: 'Post-end Error.'
+                })
+            } else {
+                res.json({
+                    code: 1,
+                    msg: '1.',
+                    data: {
+                        code: req.body.lang + (Array(3).join(0) + (count + 1)).slice(-3)
+                    }
+                })
+            }
+        })
 })
 
 module.exports = router
