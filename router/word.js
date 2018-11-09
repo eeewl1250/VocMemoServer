@@ -186,4 +186,38 @@ router.post('/book/code', (req, res) => {
         })
 })
 
+// 查询book
+router.post('/book/find', (req, res) => {
+    if (!req.body.name) {
+        console.log('Front-end Error: Parameter Missing.')
+        res.json({
+            code: 0,
+            msg: 'Front-end Error: Parameter Missing.'
+        })
+    }
+    Book.$where('this.name.match(/' + req.body.name + '/i)')
+        .exec((err, books) => {
+            if (err) {
+                console.log('Book Query Err: ' + err)
+                res.json({
+                    code: 0,
+                    msg: 'Post-end Error.'
+                })
+            } else if (books.length <= 0) {
+                res.json({
+                    code: 0,
+                    msg: 'No book found.'
+                })
+            } else {
+                res.json({
+                    code: 1,
+                    msg: 'Get Book successfully.',
+                    data: {
+                        books: books
+                    }
+                })
+            }
+        })
+})
+
 module.exports = router
