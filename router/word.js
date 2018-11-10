@@ -93,34 +93,65 @@ router.post('/word', (req, res) => {
 
 // 新增example
 router.post('/exp', (req, res) => {
-    Book.findOne({code: req.body.code}, (err, book) => {
+    if (!req.body.sentence || !req.body.source) {
+        console.log('Front-end Error: Parameter Missing.')
+        res.json({
+            code: 0,
+            msg: 'Front-end Error: Parameter Missing.'
+        })
+    }
+    Example.create({
+        sentence: req.body.sentence,
+        source: req.body.source
+    }, (err, exp) => {
         if (err) {
-            console.log('Book Query Err: ' + err)
+            console.log('Example Create Err: ' + err)
             res.json({
-                code: 0,
+                code: -1,
                 msg: 'Post-end Error.'
             })
         } else {
-            Example.create({
-                sentence: req.body.sentence,
-                source: [book._id]
-            }, (err, exp) => {
-                if (err) {
-                    console.log('Example Create Err: ' + err)
-                    res.json({
-                        code: 0,
-                        msg: 'Post-end Error.'
-                    })
-                } else {
-                    res.json({
-                        code: 1,
-                        msg: 'Insert new example. Success.',
-                        data: {
-                            id: exp._id,
-                            sentence: exp.sentence
-                        }
-                    })
+            res.json({
+                code: 1,
+                msg: 'Insert new example. Success.',
+                data: {
+                    id: exp._id,
+                    sentence: exp.sentence,
+                    source: exp.source
                 }
+            })
+        }
+    })
+})
+
+// 查询example是否存在
+router.post('/exp/find', (req, res) => {
+    if (!req.body.sentence || !req.body.source) {
+        console.log('Front-end Error: Parameter Missing.')
+        res.json({
+            code: 0,
+            msg: 'Front-end Error: Parameter Missing.'
+        })
+    }
+    Example.findOne({
+        sentence: req.body.sentence,
+        source: req.body.source
+    }, (err, sentence) => {
+        if (err) {
+            console.log('Example Query Err: ' + err)
+            res.json({
+                code: -1,
+                msg: 'Post-end Error.'
+            })
+        } else if (!sentence) {
+            res.json({
+                code: 0,
+                msg: 'No Example found.'
+            })
+        } else {
+            res.json({
+                code: 1,
+                msg: 'Get Example successfully.'
             })
         }
     })
